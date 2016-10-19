@@ -1,6 +1,6 @@
 {
   "name": "agave-react-ui",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "react UI framework",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
     "url": "https://github.com/nickorsk2020/agave-react-UI.git"
   },
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0"
+    "react": "^15.0.0"
   },
   "dependencies": {
     "babel-polyfill": "^6.1.18",
