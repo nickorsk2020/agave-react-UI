@@ -187,7 +187,7 @@ const Form = React.createClass({
     },
     // валидация элемента
     validateElement(ElementID = null, isInitState = false){
-        // получаем елемент по имени из атрибута функциисразу
+        // получаем елемент по имени из атрибута функции
         if(ElementID == null){
             return false;
         }

@@ -9,8 +9,6 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom'
-import '../resources/awesome_font/fonts/fontawesome-webfont.ttf';
-import '../resources/awesome_font/style/font-awesome.min.scss';
 
 const DatePicker = React.createClass({
     getSchemaElement(){
@@ -376,6 +374,20 @@ const DatePicker = React.createClass({
             cursor:pointer;
             position:absolute;
             top:10px;
+            background: #636161;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            font-size: 16px;
+            border-radius: 100%;
+            color:#fff;
+            font-weight:bolder;
+            text-align:center;
+        }
+         .datepicker-panel-right-btn:hover,
+        .datepicker-panel-left-btn:hover
+        {
+            color:#fff;
         }
          .datepicker-panel-left-btn
         {
@@ -446,8 +458,8 @@ const DatePicker = React.createClass({
                         return (
                             <div className={("datepicker"+classShowBottom)}>
                                 <div className="datepicker-panel">
-                                    <i onClick={_this.prevMonth} className="fa fa-chevron-circle-left  datepicker-panel-left-btn" aria-hidden="true"/>
-                                    <i onClick={_this.nextMonth} className="fa fa-chevron-circle-right  datepicker-panel-right-btn" aria-hidden="true"/>
+                                    <a onClick={_this.prevMonth} className="datepicker-panel-left-btn">&lang;</a>
+                                    <a onClick={_this.nextMonth} className="datepicker-panel-right-btn">&rang;</a>
                                     <div className="datepicker-panel-select">
                                         <select value={_this.props.SelectedDate.month} onChange={_this.selectMonth} ref="selectMonth_el">
                                             <option value="1">

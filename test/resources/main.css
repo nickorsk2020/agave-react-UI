@@ -1,0 +1,51 @@
+html,body
+{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: Arial;
+}
+a,
+a:hover
+{
+
+}
+a:hover
+{
+    opacity: 0.8;
+    text-decoration: none;
+}
+hr
+{
+    margin: 5px !important;
+}
+p
+{
+    margin: 0;
+}
+h3
+{
+    margin-top: 0;
+}
+
+.special_margin {
+    height: 40px;
+    width: 100%;
+    display: inline-block;
+}
+
+.error-form-validate
+{
+    color: #d70b00;
+}
+
+.btn
+{
+    margin-right: 20px;
+}
+
+.login-container
+{
+    display: inline-block;
+}
