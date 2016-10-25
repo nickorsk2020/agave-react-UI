@@ -33,6 +33,7 @@ module.exports = {
         failOnWarning: false,
         failOnError: false
     },
+    //watch:true,
     module: {
         /* preLoaders: [
          {

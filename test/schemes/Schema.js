@@ -158,7 +158,8 @@ let Schema = {
                 "placeholder":"Выбирите дату",
                 "range-years":"2012-2020",
                 "placeholder-hour":"Введите часы",
-                "placeholder-minute":"Введите минуты"
+                "placeholder-minute":"Введите минуты",
+                "mask":"DD.MM.YYYY hh:mm"
             },
             "value":"",
             "validators": [

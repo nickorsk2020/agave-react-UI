@@ -69,7 +69,7 @@ const Render = React.createClass({
         function createMarkup() { return {__html: error}; };
 
         let value = this.Form.getValueElement(ElementID);
-        let SelectedDate;
+        let settings;
         // get props element or default props
         let schemaHelper = new SchemaHelper(this.Form,ElementID);
         let ElementProps = schemaHelper.getModifyProps();
@@ -79,7 +79,7 @@ const Render = React.createClass({
         if(typeof value =='string') {
             let DateObj = new window.Date();
             // todo edit date from string
-            SelectedDate = {
+            settings = {
                 "month": DateObj.getMonth() + 1,
                 "day": DateObj.getDate(),
                 "year": DateObj.getFullYear(),
@@ -88,17 +88,18 @@ const Render = React.createClass({
                 "showBottom":true
             };
         }else{
-            SelectedDate = value.date;
+            settings = value.settings;
         }
         // this is real value component
         let ValueDate = value.value || "";
+        console.log(ValueDate);
         return (
             <FormGroup controlId={ElementID}>
                 <Col componentClass={ControlLabel} className={ElementClasses.label}>
                     {ElementProps.name}
                 </Col>
                 <Col className={ElementClasses.element}>
-                    <DatePicker showBottom={SelectedDate.showBottom} show={SelectedDate.showCalendar} value={ValueDate} SelectedDate={SelectedDate} handle={new DatePickerHandle(Element,this.Form.dispatcher)} ElementID={ElementID} schemaElement={Element} ElementProps={ElementProps}/>
+                    <DatePicker showBottom={settings.showBottom} show={settings.showCalendar} value={ValueDate} settings={settings} handle={new DatePickerHandle(Element,this.Form.dispatcher)} ElementID={ElementID} schemaElement={Element} ElementProps={ElementProps}/>
                 </Col>
                 {error.length>0 ? <div dangerouslySetInnerHTML={createMarkup()} />: null}
             </FormGroup>

@@ -37,15 +37,14 @@ const DatePicker = React.createClass({
                 _this.show = false;
             },400)
         }, true);
-
         window.addEventListener("click",this.windowClickListener, false);
     },
     hideCalendar(){
         let schemaElement = this.getSchemaElement();
-        let date = Object.assign({},this.props.SelectedDate);
-        date.showCalendar = false;
+        let settings = Object.assign({},this.props.settings);
+        settings.showCalendar = false;
         // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-        this.props.handle.onHide({ElementID:this.props.ElementID,Element:schemaElement,Value:{date:date,value:this.props.value}});
+        this.props.handle.onHide({ElementID:this.props.ElementID,Element:schemaElement,Value:{settings:settings,value:this.props.value}});
     },
     // show overlay on top or bottom?
     showOnBottom(){
@@ -60,64 +59,64 @@ const DatePicker = React.createClass({
     },
     showCalendar(){
         let schemaElement = this.getSchemaElement();
-        let date = Object.assign({},this.props.SelectedDate);
-        date.showCalendar = true;
+        let settings = Object.assign({},this.props.settings);
+        settings.showCalendar = true;
         if(this.showOnBottom()){
-            date.showBottom = true;
+            settings.showBottom = true;
         }else{
-            date.showBottom = false;
+            settings.showBottom = false;
         }
         // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{date:date,value:this.props.value}});
+        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{settings:settings,value:this.props.value}});
     },
     // select next month
     nextMonth(){
         let schemaElement = this.getSchemaElement();
-        let date = Object.assign({},this.props.SelectedDate);
-        date.month++;
-        if(date.month>12){date.month=1}
+        let settings = Object.assign({},this.props.settings);
+        settings.month++;
+        if(settings.month>12){settings.month=1}
         // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{date:date,value:this.props.value}});
+        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{settings:settings,value:this.props.value}});
     },
     // select previous month
     prevMonth(){
         let schemaElement = this.getSchemaElement();
-        let date = Object.assign({},this.props.SelectedDate);
-        date.month--;
-        if(date.month<=0){date.month=12}
+        let settings = Object.assign({},this.props.settings);
+        settings.month--;
+        if(settings.month<=0){settings.month=12}
         // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{date:date,value:this.props.value}});
+        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{settings:settings,value:this.props.value}});
     },
     // select day handler
     selectDay(event){
         let schemaElement = this.getSchemaElement();
-        let date = Object.assign({},this.props.SelectedDate);
-        date.day = event.target.getAttribute('data-day');
+        let settings = Object.assign({},this.props.settings);
+        settings.day = event.target.getAttribute('data-day');
         let value = this.props.value;
         if(value==''){
-            value = Object.assign({},date);
+            value = {};
         }
-        value.day = date.day;
-        value.month = date.month;
-        value.year = date.year;
+        value.day = settings.day;
+        value.month = settings.month;
+        value.year = settings.year;
         // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{date:date,value:value}});
+        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{settings:settings,value:value}});
     },
     // select month handler
     selectMonth(event) {
         let schemaElement = this.getSchemaElement();
-        let date = Object.assign({},this.props.SelectedDate);
-        date.month = event.target.value;
+        let settings = Object.assign({},this.props.settings);
+        settings.month = event.target.value;
         // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{date:date,value:this.props.value}});
+        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{settings:settings,value:this.props.value}});
     },
     // select year handler
     selectYear(event){
         let schemaElement = this.getSchemaElement();
-        let date = Object.assign({},this.props.SelectedDate);
-        date.year = event.target.value;
+        let settings = Object.assign({},this.props.settings);
+        settings.year = event.target.value;
         // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{date:date,value:this.props.value}});
+        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{settings:settings,value:this.props.value}});
     },
     // count days in month
     daysInMonth(year,month) {
@@ -128,10 +127,10 @@ const DatePicker = React.createClass({
     },
     //info from date props component
     getCalendarInfo() {
-        let Date = this.props.SelectedDate;
-        let Day =Date.day;
-        let Month =Date.month;
-        let Year = Date.year;
+        let settings = this.props.settings;
+        let Day =settings.day;
+        let Month =settings.month;
+        let Year = settings.year;
         var firstDay = new window.Date(Year,Month-1, 1);
         let days = this.daysInMonth(Year,Month-1);
         let numFirstDay = firstDay.getDay();
@@ -151,7 +150,6 @@ const DatePicker = React.createClass({
     // get formatted date value
     getFormattedDate(){
         let value = this.props.value;
-        let schemaElement = this.getSchemaElement();
         if(typeof value=='string'){
             let props = this.props.ElementProps;
             return props.placeholder;
@@ -176,6 +174,51 @@ const DatePicker = React.createClass({
             minute = '';
         }
         return day+'.'+month+'.'+value.year+' '+hour+':'+minute;
+    },
+    getMask(){
+        let schema = this.getSchemaElement();
+        return schema.props.mask || 'DD.MM.YYYY hh:mm';
+    },
+    // get formatted date value
+    getFormattedDate(){
+        let mask = this.getMask();
+        let value = this.props.value;
+        if(value == ''){
+            let props = this.props.ElementProps;
+            return props.placeholder;
+        }
+        let day = value.day;
+        if(day<10){
+            day='0'+day;
+        }
+        let month = value.month;
+        if(month<10){
+            month='0'+month;
+        }
+        let result = mask.replace("DD",day).replace("MM",month).replace("YYYY",value.year);
+        if(typeof value.hour!='undefined'){
+            let hour = parseInt(value.hour) || 0;
+            if(hour<10){
+                hour='0'+hour;
+            }
+            let minute = parseInt(value.minute) || 0;
+            if(minute<10){
+                minute='0'+minute;
+            }
+            if(hour==''){
+                minute = '';
+            }
+            // replace mask hour and minute
+            if(result.indexOf('hh')>-1){
+                result = result.replace('hh',hour);
+            }
+            if(result.indexOf('mm')>-1){
+                result = result.replace('mm',minute);
+            }
+        }else{
+            result = result.substring(0,result.indexOf('hh')).trim();
+        }
+        return result;
     },
     // render calendar days
     renderCalendar(){
@@ -235,24 +278,24 @@ const DatePicker = React.createClass({
     },
     changeHourHandler(event){
         let schemaElement = this.getSchemaElement();
-        let date = Object.assign({},this.props.SelectedDate);
+        let settings = Object.assign({},this.props.settings);
         let value = this.props.value;
         if(typeof value=='object'){
             value.hour = Math.abs(parseInt(event.target.value));
             if(value.hour>23) value.hour =23;
             // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-            this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{date:date,value:value}});
+            this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{settings:settings,value:value}});
         }
     },
     changeMinuteHandler(event){
         let schemaElement = this.getSchemaElement();
-        let date = Object.assign({},this.props.SelectedDate);
+        let settings = Object.assign({},this.props.settings);
         let value = this.props.value;
         if(typeof value=='object'){
             value.minute = Math.abs(parseInt(event.target.value));
             if(value.minute>59) value.minute =59;
             // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-            this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{date:date,value:value}});
+            this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:{settings:settings,value:value}});
         }
     },
     render: function(){
@@ -425,7 +468,7 @@ const DatePicker = React.createClass({
         `;
         let _this = this;
         // years diapason
-        let years = this.props.SelectedDate.rangeYears.split('-');
+        let years = this.props.settings.rangeYears.split('-');
         let yearsDiapason = parseInt(years[1]) -  parseInt(years[0])+1;
         if(yearsDiapason<0){
             console.error("Wrong range of years, see Schema");
@@ -461,7 +504,7 @@ const DatePicker = React.createClass({
                                     <a onClick={_this.prevMonth} className="datepicker-panel-left-btn">&lang;</a>
                                     <a onClick={_this.nextMonth} className="datepicker-panel-right-btn">&rang;</a>
                                     <div className="datepicker-panel-select">
-                                        <select value={_this.props.SelectedDate.month} onChange={_this.selectMonth} ref="selectMonth_el">
+                                        <select value={_this.props.settings.month} onChange={_this.selectMonth} ref="selectMonth_el">
                                             <option value="1">
                                                 Январь
                                             </option>
@@ -500,7 +543,7 @@ const DatePicker = React.createClass({
                                             </option>
                                         </select>
                                         &nbsp;&nbsp;&nbsp;
-                                        <select value={_this.props.SelectedDate.year} onChange={_this.selectYear}>
+                                        <select value={_this.props.settings.year} onChange={_this.selectYear}>
                                             {selectYearData}
                                         </select>
                                     </div>
