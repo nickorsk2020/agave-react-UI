@@ -8,11 +8,10 @@
  * */
 
 const Dispatcher = class{
-    Form = null;
     constructor(Form = null){
         this.Form = Form;
     }
-    // отпарвляет тип события,ID элемента сгенерирующего событие, Элемент и его значение
+    // send type event and data message
     SendMessage(Type,Message){
         this.Form.dispatcher_events[Type](Message);
     }

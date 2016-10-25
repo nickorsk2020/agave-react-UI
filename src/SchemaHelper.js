@@ -8,9 +8,6 @@
  * */
 
 const SchemaHelper = class{
-    Form = null;
-    SchemaElement = null;
-    ElementID = null;
     constructor(Form,ElementID){
         this.Form = Form;
         this.ElementID = ElementID;

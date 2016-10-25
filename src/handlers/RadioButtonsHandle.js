@@ -8,8 +8,6 @@
  * */
 
 const RadioButtonsHandle = class{
-    Element = null;
-    Dispatcher = null;
     constructor(Element,Dispatcher){
         this.Element = Element;
         this.Dispatcher = Dispatcher;

@@ -8,8 +8,6 @@
  * */
 
 const ValidationRules = class{
-    AllowedRules = [];
-    schemaElement = null;
     constructor(typeComponent,schemaElement){
         this.schemaElement = schemaElement;
         switch (typeComponent) {

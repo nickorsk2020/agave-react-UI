@@ -7,8 +7,8 @@
  * file that was distributed with this source code.
  * */
 
-const ValidatorSchema = class{
-    Form = null;
+const ValidatorSchema = class
+{
     constructor(Form){
         this.Form = Form;
     }
