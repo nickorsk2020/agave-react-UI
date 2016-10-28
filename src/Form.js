@@ -12,27 +12,32 @@ import ValidationRules from './ValidationRules'
 import Render from './Render'
 import Events from './Events'
 import Dispatcher from './Dispatcher'
-import ValidatorSchema from './ValidatorSchema'
+import ValidatorSchema from './schema/ValidatorSchema'
+import SchemaStore from './schema/SchemaStore'
+
 const Form = React.createClass({
-    // диспетчер для обмена сообщениями от инпута к форме
+    idForm:null,
+    // dispatcher message from input to form
     dispatcher:null,
     dispatcher_events:null,
-    // показать ошибку валидации формы
+    // show error validation form
     showError:false,
     getInitialState(){
+        this.FormID = this.getSchema().FormID;
+        // init model
         let state = this.initModel();
         return state;
     },
-    // создаем начальную модель
+    // init model
     initModel(){
-        let ElementSchema = this.getElements_FromSchema();
+        let ElementsSchema = this.getElements_FromSchema();
         let model = {
             form:{valid:false},
             elements:{}
         };
-        for(let key in ElementSchema){
+        for(let key in ElementsSchema){
             model.elements[key] = {
-                value:ElementSchema[key].value,
+                value:ElementsSchema[key].value,
                 valid:this.validateElement(key,true).valid
             }
         }
@@ -129,9 +134,11 @@ const Form = React.createClass({
             }.bind(this),
             //=============Input[END]==========================
         };
-
+        /** Events form **/
         this.Events = Events;
         this.Events.onSubmit = this.props.onSubmit.bind(null,{Form:this,Model:this.state});
+        /** Init Schema**/
+        SchemaStore.setSchema(this.getSchema());
     },
     // получаем состояние модели
     getModelState(){
@@ -193,20 +200,19 @@ const Form = React.createClass({
         }
         let Element = null;
         let schemaElement =  this.getElementSchema(ElementID);
-        // при первом запуске берем начальные данные для валидации из схемы, а не модели
+        // for first init component get data from schema, not from model
         if(isInitState){
             Element = schemaElement;
         }else{
             Element = this.getElement(ElementID)
         }
-        // получаем элемент [КОНЕЦ]
-        // получаем валидатор элемента
+        // get validators list of component from schema
         let validators = this.getValidators(schemaElement);
-        // валидируем
+        // validate
         let isValid = true;
         let error = "";
         for(let v=0;v<validators.length;v++){
-            // кастомный валидатор
+            // if custom validator type
             if(validators[v].type=="custom" && !isInitState){
                 // вызываем функцию из схемы с передачей значения инпута и состояния модели
                 isValid = validators[v].validator({Form:this,Value:Element.value,Model:this.getModelState()});
@@ -217,7 +223,7 @@ const Form = React.createClass({
                 continue;
             }
 
-            // если типовые валидаторы
+            // if common validator type
             let Rules = new ValidationRules(schemaElement.type,schemaElement);
             if(Rules.validateRules(validators[v].type)){
                 let validatorProp = null;

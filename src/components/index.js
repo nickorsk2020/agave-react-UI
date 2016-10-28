@@ -14,6 +14,6 @@ export Textarea from './Textarea';
 export Select from './Select';
 export Tinymce from './Tinymce';
 export Static from './Static';
-export DatePicker from './DatePicker';
+export DatePicker from './DatePicker/Component';
 export RadioButtons from './RadioButtons';
 export CheckBoxes from './CheckBoxes';

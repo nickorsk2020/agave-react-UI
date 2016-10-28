@@ -1,5 +1,5 @@
 let Schema = {
-    "nameform":"list_elements",
+    "FormID":"list_elements",
     "errorForm":"Данные заполнены не верно",
     "classes": {
         "form": "loginform",
@@ -150,8 +150,6 @@ let Schema = {
         "datepicker": {
             "type":'datepicker',
             "classes":{
-                "label":"",
-                "element":""
             },
             "props": {
                 "name": "datepicker",

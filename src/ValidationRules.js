@@ -110,10 +110,17 @@ const ValidationRules = class{
         let AllowedRules = this.AllowedRules;
         return AllowedRules.includes(Rule);
     }
+    datepicker_notNull(val){
+        console.log(val);
+       if(val.value==''){
+           return false;
+       }else{
+           return true;
+       }
+    }
     checkbox_notNull(val){
         if(Array.isArray(val)){
             if(val.length>0){
-                console.log(val);
                 return true;
             }
         }
@@ -122,6 +129,7 @@ const ValidationRules = class{
     notNull(val){
         let schemaElement = this.getSchemaElement();
         if(schemaElement.type=='checkBoxes') return this.checkbox_notNull(val);
+        if(schemaElement.type=='datepicker') return this.datepicker_notNull(val);
 
         if(val==null){ return false;}
         if(typeof val =="number"){

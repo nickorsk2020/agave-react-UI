@@ -8,7 +8,8 @@
  * */
 
 import React from 'react';
-import _typeof from '../Helper';
+import { _typeof } from '../Helper';
+
 const Static = React.createClass({
     getSchemaElement(){
         return this.props.schemaElement;

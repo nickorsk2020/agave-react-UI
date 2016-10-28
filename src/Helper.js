@@ -6,8 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  * */
-
-export function _typeof(obj) {
+function _typeof(obj) {
     for (var i = 1; obj && i < arguments.length; ++i) {
         if(typeof obj[arguments[i]] =='undefined'){
             return false;
@@ -16,8 +15,7 @@ export function _typeof(obj) {
     }
     return obj;
 }
-
-export function eventFire(el, etype){
+function eventFire(el, etype){
     if (el.fireEvent) {
         el.fireEvent('on' + etype);
     } else {
@@ -26,5 +24,15 @@ export function eventFire(el, etype){
         el.dispatchEvent(evObj);
     }
 }
-
-export  default  _typeof;
+function deepClone(obj, hash = new WeakMap()) {
+    if (Object(obj) !== obj) return obj; // primitives
+    if (hash.has(obj)) return hash.get(obj); // cyclic reference
+    var result = Array.isArray(obj) ? []
+        : obj.constructor ? new obj.constructor() : {};
+    hash.set(obj, result);
+    if (obj instanceof Map)
+        Array.from(obj, ([key, val]) => result.set(key, deepClone(val, hash)) );
+    return Object.assign(result, ...Object.keys(obj).map (
+        key => ({ [key]: deepClone(obj[key], hash) }) ));
+}
+export { eventFire, _typeof, deepClone };

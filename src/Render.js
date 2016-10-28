@@ -12,7 +12,8 @@ import { FormGroup,ControlLabel, Col } from 'react-bootstrap';
 import { TinyMceHandle, TextAreaHandle, FileHandle, CheckBoxesHandle,RadioButtonsHandle, DatePickerHandle,SelectHandle, InputHandle, ImageHandle} from './handlers'
 // Elements
 import { CheckBoxes, RadioButtons, DatePicker, Static, File, Tinymce, Select, Textarea, Input, Submit, Image} from './components/'
-import SchemaHelper from './SchemaHelper';
+import SchemaStore from './schema/SchemaStore'
+import SchemaHelper from './schema/SchemaHelper'
 
 const Render = React.createClass({
     Form:null,
@@ -66,40 +67,20 @@ const Render = React.createClass({
         let Element = this.props.Element;
         let ElementID = this.props.ElementID;
         let error = this.Form.getElement(ElementID).valid_error || "";
-        function createMarkup() { return {__html: error}; };
-
+        function createMarkup() { return {__html: error}; }
         let value = this.Form.getValueElement(ElementID);
-        let settings;
         // get props element or default props
-        let schemaHelper = new SchemaHelper(this.Form,ElementID);
-        let ElementProps = schemaHelper.getModifyProps();
-        let ElementClasses = schemaHelper.getModifyClasses();
-        // range years from element props
-        let rangeYears = ElementProps["range-years"];
-        if(typeof value =='string') {
-            let DateObj = new window.Date();
-            // todo edit date from string
-            settings = {
-                "month": DateObj.getMonth() + 1,
-                "day": DateObj.getDate(),
-                "year": DateObj.getFullYear(),
-                "rangeYears":rangeYears,
-                "showCalendar":false,
-                "showBottom":true
-            };
-        }else{
-            settings = value.settings;
-        }
-        // this is real value component
-        let ValueDate = value.value || "";
-        console.log(ValueDate);
+        let SchemaElement = SchemaStore.getSchemaElement({ FormID:this.Form.FormID, ElementID:ElementID});
+        let ElementProps = SchemaElement.props;
+        let ElementClasses = SchemaElement.classes;
+        let value_data = value.value_data || "";
         return (
             <FormGroup controlId={ElementID}>
                 <Col componentClass={ControlLabel} className={ElementClasses.label}>
                     {ElementProps.name}
                 </Col>
                 <Col className={ElementClasses.element}>
-                    <DatePicker showBottom={settings.showBottom} show={settings.showCalendar} value={ValueDate} settings={settings} handle={new DatePickerHandle(Element,this.Form.dispatcher)} ElementID={ElementID} schemaElement={Element} ElementProps={ElementProps}/>
+                    <DatePicker FormID={this.Form.FormID} ElementID={ElementID} value_data={value_data} handle={new DatePickerHandle(Element,this.Form.dispatcher)}/>
                 </Col>
                 {error.length>0 ? <div dangerouslySetInnerHTML={createMarkup()} />: null}
             </FormGroup>
