@@ -55,7 +55,7 @@ let Schema = {
             },
             "props": {
                 "name": "file",
-                "description":"Размер должен быть не более 5 Мб"
+                "description":"Размер должен быть не более 1 Мб и не менее 500кб"
             }
             ,
             "value": "",

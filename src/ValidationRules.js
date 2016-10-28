@@ -112,11 +112,7 @@ const ValidationRules = class{
     }
     datepicker_notNull(val){
         console.log(val);
-       if(val.value==''){
-           return false;
-       }else{
-           return true;
-       }
+        return val.length>0;
     }
     checkbox_notNull(val){
         if(Array.isArray(val)){

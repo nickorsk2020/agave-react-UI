@@ -12,14 +12,11 @@ const DatePickerHandle = class{
         this.Element = Element;
         this.Dispatcher = Dispatcher;
     }
-    onBlur(Message){
-        this.Dispatcher.SendMessage('datePicker_blur',Message);
-    }
     onChange(Message){
         this.Dispatcher.SendMessage('datePicker_change',Message);
     }
-    onHide(Message){
-        this.Dispatcher.SendMessage('datePicker_hide',Message);
+    onChangeSettings(Message){
+        this.Dispatcher.SendMessage('datePicker_change_settings',Message);
     }
 };
 

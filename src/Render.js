@@ -73,14 +73,14 @@ const Render = React.createClass({
         let SchemaElement = SchemaStore.getSchemaElement({ FormID:this.Form.FormID, ElementID:ElementID});
         let ElementProps = SchemaElement.props;
         let ElementClasses = SchemaElement.classes;
-        let value_data = value.value_data || "";
+        console.log('Ошибка',error);
         return (
             <FormGroup controlId={ElementID}>
                 <Col componentClass={ControlLabel} className={ElementClasses.label}>
                     {ElementProps.name}
                 </Col>
                 <Col className={ElementClasses.element}>
-                    <DatePicker FormID={this.Form.FormID} ElementID={ElementID} value_data={value_data} handle={new DatePickerHandle(Element,this.Form.dispatcher)}/>
+                    <DatePicker FormID={this.Form.FormID} ElementID={ElementID} handle={new DatePickerHandle(Element,this.Form.dispatcher)} value={value}/>
                 </Col>
                 {error.length>0 ? <div dangerouslySetInnerHTML={createMarkup()} />: null}
             </FormGroup>

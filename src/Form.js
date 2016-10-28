@@ -96,16 +96,12 @@ const Form = React.createClass({
                 this.validateForm();
             }.bind(this),
             //=============DatePicker===========================
-            // устанавливает значение и валидирует элемент
-            datePicker_blur:function(Message){
-                this.setModelState(Message,true);
-            }.bind(this),
             // устанавливает значение элемента
             datePicker_change:function(Message){
                 this.showError = false;
                 this.setModelState(Message);
             }.bind(this),
-            datePicker_hide:function(Message) {
+            datePicker_change_settings:function(Message) {
                 this.setModelState(Message);
             }.bind(this),
             //=============DatePicker[END]======================
@@ -173,6 +169,7 @@ const Form = React.createClass({
         let validForm = true;
         for(let e in elements){
             let validation = this.validateElement(e);
+            console.log(validation,e);
             elements[e].valid = validation.valid;
             elements[e].valid_error = validation.error;
             if(!elements[e].valid && validForm){
@@ -180,7 +177,6 @@ const Form = React.createClass({
             }
         }
         state.form.valid = validForm;
-
         if(!state.form.valid){
             this.showError = true;
         }
