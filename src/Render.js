@@ -9,7 +9,7 @@
 
 import React from 'react';
 import { FormGroup,ControlLabel, Col } from 'react-bootstrap';
-import { TinyMceHandle, TextAreaHandle, FileHandle, CheckBoxesHandle,RadioButtonsHandle, DatePickerHandle,SelectHandle, InputHandle, ImageHandle} from './handlers'
+import { TinyMceHandle, TextAreaHandle, FileHandle, CheckBoxesHandle,RadioButtonsHandle, DatePickerHandle,SelectHandle, InputHandle, ImageHandle} from './handlers_components'
 // Elements
 import { CheckBoxes, RadioButtons, DatePicker, Static, File, Tinymce, Select, Textarea, Input, Submit, Image} from './components/'
 import SchemaStore from './schema/SchemaStore'
