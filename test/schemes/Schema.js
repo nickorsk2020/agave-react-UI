@@ -189,7 +189,7 @@ let Schema = {
             "props": {
                 "name": "radioButtons"
             },
-            "value":"",
+            "value":2,
             "values": [
                 {"value":1,"text":"тип 1"},
                 {"value":2,"text":"тип 2"},
@@ -211,7 +211,7 @@ let Schema = {
             "props": {
                 "name": "checkBoxes"
             },
-            "value":"",
+            "value":"a;c",
             "values": [
                 {"value":"a","text":"тип 1"},
                 {"value":"b","text":"тип 2"},

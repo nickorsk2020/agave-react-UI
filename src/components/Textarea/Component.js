@@ -8,21 +8,30 @@
  * */
 
 import React from 'react';
+import Component from '../classes/Component'
+import PrivateSettings from './PrivateSettings'
 
-const Textarea = React.createClass({
-    getSchemaElement(){
-        return this.props.schemaElement;
-    },
+class Textarea extends Component
+{
+    binding(){
+        this.handleChange = this.handleChange.bind(this);
+        this.handleBlur = this.handleBlur.bind(this);
+    }
+    constructor(props){
+        super(props);
+        this.binding();
+    }
+    componentWillMount(){
+        this.initSettingsElement(PrivateSettings);
+    }
     handleChange(e){
-        let schemaElement = this.getSchemaElement();
         // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:e.target.value});
-    },
+        this.props.handle.onChange({ElementID:this.props.ElementID,Value:e.target.value});
+    }
     handleBlur(e){
-        let schemaElement = this.getSchemaElement();
         // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-        this.props.handle.onBlur({ElementID:this.props.ElementID,Element:schemaElement,Value:e.target.value});
-    },
+        this.props.handle.onBlur({ElementID:this.props.ElementID,Value:e.target.value});
+    }
     render() {
         let style = {
             "width": "100%",
@@ -34,6 +43,6 @@ const Textarea = React.createClass({
             <textarea style={style} value={this.props.value} onChange={this.handleChange} onBlur={this.handleBlur}>{this.props.value}</textarea>
         );
     }
-});
+}
 
 export default Textarea;

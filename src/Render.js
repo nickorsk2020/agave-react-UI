@@ -23,18 +23,17 @@ const Render = React.createClass({
         let value = this.Form.getValueElement(ElementID);
         let error = this.Form.getElement(ElementID).valid_error || "";
         function createMarkup() { return {__html: error}; };
-
         // get props element or default props
-        let schemaHelper = new SchemaHelper(this.Form,ElementID);
-        let ElementProps = schemaHelper.getModifyProps();
-        let ElementClasses = schemaHelper.getModifyClasses();
+        let SchemaElement = SchemaStore.getSchemaElement({ FormID:this.Form.FormID, ElementID:ElementID});
+        let ElementProps = SchemaElement.props;
+        let ElementClasses = SchemaElement.classes;
         return (
             <FormGroup controlId={ElementID}>
                 <Col componentClass={ControlLabel} className={ElementClasses.label}>
                     {ElementProps.name}
                 </Col>
                 <Col className={ElementClasses.element} ref="parent-container">
-                    <CheckBoxes parent={this.refs['parent-container']} value={value} valuesSchema={Element.values} handle={new CheckBoxesHandle(Element,this.Form.dispatcher)} ElementID={ElementID} schemaElement={Element}/>
+                    <CheckBoxes FormID={this.Form.FormID} ElementID={ElementID} handle={new CheckBoxesHandle(Element,this.Form.dispatcher)} value={value} parent={this.refs['parent-container']} />
                 </Col>
                 {error.length>0 ? <div dangerouslySetInnerHTML={createMarkup()} />: null}
             </FormGroup>
@@ -48,16 +47,16 @@ const Render = React.createClass({
         function createMarkup() { return {__html: error}; };
 
         // get props element or default props
-        let schemaHelper = new SchemaHelper(this.Form,ElementID);
-        let ElementProps = schemaHelper.getModifyProps();
-        let ElementClasses = schemaHelper.getModifyClasses();
+        let SchemaElement = SchemaStore.getSchemaElement({ FormID:this.Form.FormID, ElementID:ElementID});
+        let ElementProps = SchemaElement.props;
+        let ElementClasses = SchemaElement.classes;
         return (
             <FormGroup controlId={ElementID}>
                 <Col componentClass={ControlLabel} className={ElementClasses.label}>
                     {ElementProps.name}
                 </Col>
                 <Col className={ElementClasses.element}>
-                    <RadioButtons value={value} values={Element.values} handle={new RadioButtonsHandle(Element,this.Form.dispatcher)} ElementID={ElementID} schemaElement={Element}/>
+                    <RadioButtons FormID={this.Form.FormID} ElementID={ElementID} handle={new RadioButtonsHandle(Element,this.Form.dispatcher)} value={value}/>
                 </Col>
                 {error.length>0 ? <div dangerouslySetInnerHTML={createMarkup()} />: null}
             </FormGroup>
@@ -131,16 +130,16 @@ const Render = React.createClass({
         let error = this.Form.getElement(ElementID).valid_error || "";
         function createMarkup() { return {__html: error}; };
         // get props from schema or default
-        let schemaHelper = new SchemaHelper(this.Form,ElementID);
-        let ElementProps = schemaHelper.getModifyProps();
-        let ElementClasses = schemaHelper.getModifyClasses();
+        let SchemaElement = SchemaStore.getSchemaElement({ FormID:this.Form.FormID, ElementID:ElementID});
+        let ElementProps = SchemaElement.props;
+        let ElementClasses = SchemaElement.classes;
         return (
             <FormGroup controlId={ElementID}>
                 <Col componentClass={ControlLabel} className={ElementClasses.label}>
                     {ElementProps.name}
                 </Col>
                 <Col className={ElementClasses.element}>
-                    <Textarea value={this.Form.getValueElement(ElementID)} handle={new TextAreaHandle(Element,this.Form.dispatcher)} ElementID={ElementID} schemaElement={Element}/>
+                    <Textarea FormID={this.Form.FormID} ElementID={ElementID} handle={new TextAreaHandle(Element,this.Form.dispatcher)} value={this.Form.getValueElement(ElementID)} />
                 </Col>
                 {error.length>0 ? <div dangerouslySetInnerHTML={createMarkup()} />: null}
             </FormGroup>

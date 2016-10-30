@@ -11,6 +11,7 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import Component from '../classes/Component'
 import PrivateSettings from './PrivateSettings'
+import { deepClone } from '../../Helper'
 
 class CheckBoxes extends Component
 {
@@ -18,13 +19,25 @@ class CheckBoxes extends Component
         this.sendValue = this.sendValue.bind(this);
         this.clickParentDiv = this.clickParentDiv.bind(this);
         this.changeRadio = this.changeRadio.bind(this);
+        this.setValueFromSchema = this.setValueFromSchema.bind(this);
     }
     constructor(props){
         super(props);
         this.binding();
     }
+    // set value from schema
+    setValueFromSchema(){
+        let value = this.getValueElement();
+        if(value.length>0){
+            let settings = deepClone(this.getSettings());
+            let array_values = value.split(';');
+            settings.array_values = array_values;
+            this.setSettings(settings);
+        }
+    }
     componentWillMount(){
         this.initSettingsElement(PrivateSettings);
+        this.setValueFromSchema();
     }
     // send value to dispatcher
     sendValue(Value){
@@ -55,7 +68,6 @@ class CheckBoxes extends Component
         let settings = deepClone(this.getSettings());
         settings.array_values = array_values;
         this.setSettings(settings);
-        console.log('!!!!!!!!',array_values.join(';'));
         // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
         this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:array_values.join(';')});
     }
@@ -67,7 +79,11 @@ class CheckBoxes extends Component
             this.sendValue(radio.value);
         }
     }
+    clickRadio(event){
+        event.stopPropagation();
+    }
     changeRadio(event){
+        event.stopPropagation();
         let radio = event.target;
         this.sendValue(radio.value);
     }
@@ -78,7 +94,7 @@ class CheckBoxes extends Component
                 display:inline-block;
             }
         `;
-        let valuesSchema = this.props.valuesSchema;
+        let valuesSchema = this.getSchemaElement().values;
         let _this = this;
         let settings = this.getSettings();
         let array_values = settings.array_values;
@@ -94,7 +110,7 @@ class CheckBoxes extends Component
                             checked =true;
                         }
                     }
-                    return  <div key={Value.value} ><div onClick={_this.clickParentDiv} className="checkbox-element-parent"><input className="checkbox-element" checked={checked} type="checkbox" name={_this.props.ElementID} value={Value.value} onChange={_this.changeRadio}/> &nbsp;{Value.text}</div><br/></div>
+                    return  <div key={Value.value} ><div onClick={_this.clickParentDiv} className="checkbox-element-parent"><input className="checkbox-element" checked={checked} type="checkbox" name={_this.props.ElementID} value={Value.value} onChange={_this.changeRadio} onClick={_this.clickRadio}/> &nbsp;{Value.text}</div><br/></div>
                 })}
             </div>
         );

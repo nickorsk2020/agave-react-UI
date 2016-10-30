@@ -9,7 +9,7 @@
 
 import React from 'react';
 import {eventFire} from '../Helper';
-import SchemaHelper from '../SchemaHelper';
+import SchemaHelper from '../schema/SchemaHelper';
 
 const Tinymce = React.createClass({
     componentDidMount(){

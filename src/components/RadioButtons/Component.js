@@ -8,17 +8,28 @@
  * */
 
 import React from 'react';
+import Component from '../classes/Component'
+import PrivateSettings from './PrivateSettings'
 
-const RadioButtons = React.createClass({
-    getSchemaElement(){
-        return this.props.schemaElement;
-    },
+class RadioButtons extends Component
+{
+    binding(){
+        this.sendValue = this.sendValue.bind(this);
+        this.clickParentDiv = this.clickParentDiv.bind(this);
+        this.changeRadio = this.changeRadio.bind(this);
+    }
+    constructor(props){
+        super(props);
+        this.binding();
+    }
+    componentWillMount(){
+        this.initSettingsElement(PrivateSettings);
+    }
     // send value to dispatcher
     sendValue(value){
-        let schemaElement = this.getSchemaElement();
         // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:parseInt(value)});
-    },
+        this.props.handle.onChange({ElementID:this.props.ElementID,Value:parseInt(value)});
+    }
     clickParentDiv(event){
         event.stopPropagation();
         let el = event.target;
@@ -26,11 +37,11 @@ const RadioButtons = React.createClass({
         if(radio!=null){
             this.sendValue(radio.value);
         }
-    },
+    }
     changeRadio(event){
         let radio = event.target;
         this.sendValue(radio.value);
-    },
+    }
     render() {
         let style =  `
             .radio-element-parent{
@@ -38,7 +49,7 @@ const RadioButtons = React.createClass({
                 display:inline-block;
             }
         `;
-        let Values = this.props.values;
+        let Values = this.getSchemaElement().values;
         let _this = this;
         return(
             <div value={this.props.value}>
@@ -51,6 +62,6 @@ const RadioButtons = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default RadioButtons;
