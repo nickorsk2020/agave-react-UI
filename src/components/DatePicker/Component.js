@@ -9,43 +9,48 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom'
-import SchemaStore from '../../schema/SchemaStore'
-import PrivateSettings from './PrivateSettings'
 import { deepClone } from '../../Helper'
+import Component from '../classes/Component'
+import PrivateSettings from './PrivateSettings'
 
-export const DatePicker = React.createClass({
-    getSchemaElement(){
-        return SchemaStore.getSchemaElement({FormID:this.props.FormID,ElementID:this.props.ElementID});
-    },
-    // get props element from schema
-    getPropsElementFromSchema(){
-        return SchemaStore.getPropsElementFromSchema({FormID:this.props.FormID,ElementID:this.props.ElementID});
-    },
-    // set private settings
-    setSettings(Settings){
-        return this.settings.setSettings(Settings);
-    },
-    // get private settings
-    getSettings(){
-        return this.settings.getSettings();
-    },
-    // get value element form
-    getValueElement(){
-        return this.props.value;
-    },
+class DatePicker extends Component
+{
+    binding(){
+        this.windowClickListener = this.windowClickListener.bind(this);
+        this.hideIfClickAnywhere = this.hideIfClickAnywhere.bind(this);
+        this.setValueFromSchema = this.setValueFromSchema.bind(this);
+        this.parseValueDate = this.parseValueDate.bind(this);
+        this.showOnBottom = this.showOnBottom.bind(this);
+        this.hideCalendar = this.hideCalendar.bind(this);
+        this.showCalendar = this.showCalendar.bind(this);
+        this.nextMonth = this.nextMonth.bind(this);
+        this.prevMonth = this.prevMonth.bind(this);
+        this.selectDay = this.selectDay.bind(this);
+        this.selectMonth = this.selectMonth.bind(this);
+        this.selectYear = this.selectYear.bind(this);
+        this.changeHourHandler = this.changeHourHandler.bind(this);
+        this.changeMinuteHandler = this.changeMinuteHandler.bind(this);
+        this.daysInMonth = this.daysInMonth.bind(this);
+        this.getCalendarInfo = this.getCalendarInfo.bind(this);
+        this.getMask = this.getMask.bind(this);
+        this.getFormattedDate = this.getFormattedDate.bind(this);
+        this.renderCalendar = this.renderCalendar.bind(this);
+    }
+    constructor(props){
+        super(props);
+        this.binding();
+    }
     componentWillUnmount(){
         window.removeEventListener("click",this.windowClickListener);
-    },
-    // helper for overlay
-    show:false,
-    windowClickListener:function (e) {
+    }
+    windowClickListener(e) {
         if(!this.getSettings().showCalendar && !this.show) return;
         if(!this.show){
             this.hideCalendar();
         }else{
             this.showCalendar();
         }
-    },
+    }
     // hide calendar if click anywhere
     hideIfClickAnywhere(){
         let _this = this;
@@ -60,18 +65,14 @@ export const DatePicker = React.createClass({
             },400)
         }, true);
         window.addEventListener("click",this.windowClickListener, false);
-    },
-    // init settings element form
-    initSettingsElement(){
-        this.settings = new PrivateSettings(this);
-    },
+    }
     componentWillMount(){
-        this.initSettingsElement();
+        this.initSettingsElement(PrivateSettings);
         this.setValueFromSchema();
-    },
+    }
     componentDidMount(){
         this.hideIfClickAnywhere();
-    },
+    }
     // set value from schema
     setValueFromSchema(){
         let value = this.getValueElement();
@@ -84,7 +85,7 @@ export const DatePicker = React.createClass({
             settings.valueSettings = parseValueDate;
             this.setSettings(settings);
         }
-    },
+    }
     // parse value to valueSettings of PrivateSettings
     parseValueDate(){
         let mask = this.getMask();
@@ -101,7 +102,7 @@ export const DatePicker = React.createClass({
             hour:hour,
             minute:minute
         }
-    },
+    }
     // show overlay on top or bottom?
     showOnBottom(){
         let calendar = ReactDOM.findDOMNode(this.refs.calendar);
@@ -112,14 +113,14 @@ export const DatePicker = React.createClass({
         }else{
             return false;
         }
-    },
+    }
     hideCalendar(){
         let settings = deepClone(this.getSettings());
         settings.showCalendar = false;
         this.setSettings(settings);
         // send events with dispatcher to form
         this.props.handle.onChangeSettings({ElementID:this.props.ElementID,Value:this.getValueElement()});
-    },
+    }
     showCalendar(){
         let settings = deepClone(this.getSettings());
         settings.showCalendar = true;
@@ -127,7 +128,7 @@ export const DatePicker = React.createClass({
         this.setSettings(settings);
         // send events with dispatcher to form
         this.props.handle.onChangeSettings({ElementID:this.props.ElementID,Value:this.getValueElement()});
-    },
+    }
     // select next month
     nextMonth(){
         let settings = deepClone(this.getSettings());
@@ -136,7 +137,7 @@ export const DatePicker = React.createClass({
         this.setSettings(settings);
         // send events with dispatcher to form
         this.props.handle.onChangeSettings({ElementID:this.props.ElementID,Value:this.getValueElement()});
-    },
+    }
     // select previous month
     prevMonth(){
         let settings = deepClone(this.getSettings());
@@ -145,7 +146,7 @@ export const DatePicker = React.createClass({
         this.setSettings(settings);
         // send events with dispatcher to form
         this.props.handle.onChangeSettings({ElementID:this.props.ElementID,Value:this.getValueElement()});
-    },
+    }
     // select day handler
     selectDay(event){
         let settings = deepClone(this.getSettings());
@@ -159,7 +160,7 @@ export const DatePicker = React.createClass({
         this.setSettings(settings);
         // send events with dispatcher to form
         this.props.handle.onChange({ElementID:this.props.ElementID,Value:this.getFormattedDate()});
-    },
+    }
     // select month handler
     selectMonth(event) {
         let settings = deepClone(this.getSettings());
@@ -167,7 +168,7 @@ export const DatePicker = React.createClass({
         this.setSettings(settings);
         // send events with dispatcher to form
         this.props.handle.onChangeSettings({ElementID:this.props.ElementID,Value:this.getValueElement()});
-    },
+    }
     // select year handler
     selectYear(event){
         let settings = deepClone(this.getSettings());
@@ -175,7 +176,7 @@ export const DatePicker = React.createClass({
         this.setSettings(settings);
         // send events with dispatcher to form
         this.props.handle.onChangeSettings({ElementID:this.props.ElementID,Value:this.getValueElement()});
-    },
+    }
     // select hour
     changeHourHandler(event){
         let settings = deepClone(this.getSettings());
@@ -186,7 +187,7 @@ export const DatePicker = React.createClass({
             // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
             this.props.handle.onChange({ElementID:this.props.ElementID,Value:this.getFormattedDate()});
         }
-    },
+    }
     // select minute
     changeMinuteHandler(event){
         let settings = deepClone(this.getSettings());
@@ -197,14 +198,14 @@ export const DatePicker = React.createClass({
             // send events with dispatcher to form
             this.props.handle.onChange({ElementID:this.props.ElementID,Value:this.getFormattedDate()});
         }
-    },
+    }
     // count days in month
     daysInMonth(year,month) {
         var monthStart = new Date(year, month, 1);
         var monthEnd = new Date(year, month + 1, 1);
         var monthLength = (monthEnd - monthStart) / (1000 * 60 * 60 * 24);
         return monthLength;
-    },
+    }
     //info from date props component
     getCalendarInfo() {
         let settings = deepClone(this.getSettings());
@@ -226,12 +227,12 @@ export const DatePicker = React.createClass({
             month:Month,
             year:Year
         };
-    },
+    }
     // get mask date
     getMask(){
         let schema = this.getSchemaElement();
         return schema.props.mask || 'DD.MM.YYYY hh:mm';
-    },
+    }
     // get formatted date string
     getFormattedDate(){
         let mask = this.getMask();
@@ -273,7 +274,7 @@ export const DatePicker = React.createClass({
             result = result.substring(0,result.indexOf('hh')).trim();
         }
         return result;
-    },
+    }
     // render calendar days
     renderCalendar(){
         let calendarInfo = this.getCalendarInfo();
@@ -328,8 +329,8 @@ export const DatePicker = React.createClass({
             </tr>);
         }
         return WeekData;
-    },
-    render: function(){
+    }
+    render(){
         let style =  `
         .datepicker-container
         {
@@ -608,6 +609,6 @@ export const DatePicker = React.createClass({
             </div>
             );
     }
-});
+}
 
 export default DatePicker;

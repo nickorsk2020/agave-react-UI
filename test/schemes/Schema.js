@@ -65,11 +65,6 @@ let Schema = {
                     "error": "Пустое значение"
                 },
                 {
-                    "type": "fileType",
-                    "values": "pdf,doc",
-                    "error":"Поддерживается только pdf и doc формат"
-                },
-                {
                     "type":"maxFileSize",
                     "value":1000,
                     "error":"Файл больше 1 мегабайта"

@@ -169,7 +169,6 @@ const Form = React.createClass({
         let validForm = true;
         for(let e in elements){
             let validation = this.validateElement(e);
-            console.log(validation,e);
             elements[e].valid = validation.valid;
             elements[e].valid_error = validation.error;
             if(!elements[e].valid && validForm){

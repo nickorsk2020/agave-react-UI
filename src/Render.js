@@ -73,7 +73,6 @@ const Render = React.createClass({
         let SchemaElement = SchemaStore.getSchemaElement({ FormID:this.Form.FormID, ElementID:ElementID});
         let ElementProps = SchemaElement.props;
         let ElementClasses = SchemaElement.classes;
-        console.log('Ошибка',error);
         return (
             <FormGroup controlId={ElementID}>
                 <Col componentClass={ControlLabel} className={ElementClasses.label}>
@@ -151,18 +150,18 @@ const Render = React.createClass({
         let Element = this.props.Element;
         let ElementID = this.props.ElementID;
         let error = this.Form.getElement(ElementID).valid_error || "";
-        function createMarkup() { return {__html: error}; };
-        // get props from schema or default
-        let schemaHelper = new SchemaHelper(this.Form,ElementID);
-        let ElementProps = schemaHelper.getModifyProps();
-        let ElementClasses = schemaHelper.getModifyClasses();
+        function createMarkup() { return {__html: error} };
+        // get props element or default props
+        let SchemaElement = SchemaStore.getSchemaElement({ FormID:this.Form.FormID, ElementID:ElementID});
+        let ElementProps = SchemaElement.props;
+        let ElementClasses = SchemaElement.classes;
         return (
             <FormGroup controlId={ElementID}>
                 <Col componentClass={ControlLabel} className={ElementClasses.label}>
                     {ElementProps.name}
                 </Col>
                 <Col className={ElementClasses.element}>
-                    <Input type={ElementProps.type} value={this.Form.getValueElement(ElementID)} handle={new InputHandle(Element,this.Form.dispatcher)} ElementID={ElementID} schemaElement={Element}/>
+                    <Input FormID={this.Form.FormID} ElementID={ElementID} handle={new InputHandle(Element,this.Form.dispatcher)} value={this.Form.getValueElement(ElementID)}/>
                 </Col>
                 {error.length>0 ? <div dangerouslySetInnerHTML={createMarkup()} />: null}
             </FormGroup>

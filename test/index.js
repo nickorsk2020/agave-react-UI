@@ -7,6 +7,7 @@ const Example = React.createClass({
     handleSubmit(Result){
         Result.Form.validateForm();
         if(Result.Form.formIsValid()){
+            console.log(Result.Form.getModelState());
            alert('Форма заполнена верно');
         }
     },

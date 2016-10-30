@@ -9,18 +9,30 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom'
+import Component from '../classes/Component'
+import PrivateSettings from './PrivateSettings'
 
-const CheckBoxes = React.createClass({
-    getSchemaElement(){
-        return this.props.schemaElement;
-    },
+class CheckBoxes extends Component
+{
+    binding(){
+        this.sendValue = this.sendValue.bind(this);
+        this.clickParentDiv = this.clickParentDiv.bind(this);
+        this.changeRadio = this.changeRadio.bind(this);
+    }
+    constructor(props){
+        super(props);
+        this.binding();
+    }
+    componentWillMount(){
+        this.initSettingsElement(PrivateSettings);
+    }
     // send value to dispatcher
     sendValue(Value){
         let schemaElement = this.getSchemaElement();
         let parent = ReactDOM.findDOMNode(this.props.parent);
-        let value = [];
+        let array_values = [];
         if(parent==null){
-            value.push(Value);
+            array_values.push(Value);
         }else{
             // value is checked earlier
             let valueIsCheked = false;
@@ -29,20 +41,24 @@ const CheckBoxes = React.createClass({
             for(let c=0;c<checkboxes.length;c++){
                 if(checkboxes[c].checked){
                     if(Value!=checkboxes[c].value){
-                        value.push(checkboxes[c].value);
+                        array_values.push(checkboxes[c].value);
                     }else{
                         valueIsCheked = true;
-                        value.splice(c,1);
+                        array_values.splice(c,1);
                     }
                 }
             }
             if(!valueIsCheked){
-                value.push(Value);
+                array_values.push(Value);
             }
         }
+        let settings = deepClone(this.getSettings());
+        settings.array_values = array_values;
+        this.setSettings(settings);
+        console.log('!!!!!!!!',array_values.join(';'));
         // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:value});
-    },
+        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:array_values.join(';')});
+    }
     clickParentDiv(event){
         event.stopPropagation();
         let el = event.target;
@@ -50,11 +66,11 @@ const CheckBoxes = React.createClass({
         if(radio!=null){
             this.sendValue(radio.value);
         }
-    },
+    }
     changeRadio(event){
         let radio = event.target;
         this.sendValue(radio.value);
-    },
+    }
     render() {
         let style =  `
             .checkbox-element-parent{
@@ -62,9 +78,10 @@ const CheckBoxes = React.createClass({
                 display:inline-block;
             }
         `;
-        let checkedValues = this.props.value;
         let valuesSchema = this.props.valuesSchema;
         let _this = this;
+        let settings = this.getSettings();
+        let array_values = settings.array_values;
         return(
             <div value={this.props.value}>
                 <style>
@@ -72,8 +89,8 @@ const CheckBoxes = React.createClass({
                 </style>
                 {valuesSchema.map(function (Value) {
                     let checked = false;
-                    for(let c=0;c<checkedValues.length;c++){
-                        if(Value.value==checkedValues[c]){
+                    for(let a=0;a<array_values.length;a++){
+                        if(Value.value==array_values[a]){
                             checked =true;
                         }
                     }
@@ -82,6 +99,6 @@ const CheckBoxes = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default CheckBoxes;
