@@ -9,27 +9,39 @@
 
 import React from 'react';
 import  { FormControl } from 'react-bootstrap';
+import Component from '../classes/Component'
+import PrivateSettings from './PrivateSettings'
 
-const Submit = React.createClass({
-    getSchemaElement(){
-        return this.props.schemaElement;
-    },
+class Select extends Component
+{
+    binding(){
+        this.handleChange = this.handleChange.bind(this);
+    }
+    componentWillMount(){
+        this.initSettingsElement(PrivateSettings);
+    }
+    constructor(props){
+        super(props);
+        this.binding();
+    }
     handleChange(e){
         let schemaElement = this.getSchemaElement();
-        console.log(e.target.value);
         // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
         this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:e.target.value});
-    },
+    }
     render() {
-        let Values = this.props.values;
+        let propsSchema = this.getPropsElementFromSchema();
+        let Schema = this.getSchemaElement();
+        let value = this.getValueElement();
         let _this = this;
         return(
-            <FormControl componentClass="select" value={this.props.value} onChange={_this.handleChange}>
-                {Values.map(function (Value) {
+            <FormControl componentClass="select" value={value} onChange={_this.handleChange}>
+                <option disabled="disabled" value="">{propsSchema.placeholder}</option>
+                {Schema.values.map(function (Value) {
                   return  <option key={Value.value} value={Value.value}>{Value.text}</option>
                 })}
             </FormControl>
         );
     }
-});
-export default Submit;
+}
+export default Select;

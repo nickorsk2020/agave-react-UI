@@ -171,27 +171,28 @@ const Render = React.createClass({
         let ElementID = this.props.ElementID;
         let error = this.Form.getElement(ElementID).valid_error || "";
         function createMarkup() { return {__html: error}; };
-        let schemaHelper = new SchemaHelper(this.Form,ElementID);
-        let ElementProps = schemaHelper.getModifyProps();
-        let ElementClasses = schemaHelper.getModifyClasses();
+        // get props element or default props
+        let SchemaElement = SchemaStore.getSchemaElement({ FormID:this.Form.FormID, ElementID:ElementID});
+        let ElementProps = SchemaElement.props;
+        let ElementClasses = SchemaElement.classes;
         return (
             <FormGroup controlId={ElementID}>
                 <Col componentClass={ControlLabel} className={ElementClasses.label}>
                     {ElementProps.name}
                 </Col>
                 <Col className={ElementClasses.element}>
-                    <Select values={Element.values} name={Element.props.name} handle={new SelectHandle(Element,this.Form.dispatcher)} ElementID={ElementID} schemaElement={Element}/>
+                    <Select FormID={this.Form.FormID} ElementID={ElementID} handle={new SelectHandle(Element,this.Form.dispatcher)} value={this.Form.getValueElement(ElementID)}/>
                 </Col>
                 {error.length>0 ? <div dangerouslySetInnerHTML={createMarkup()} />: null}
             </FormGroup>
         );
     },
     submit(){
-        let Element = this.props.Element;
         let ElementID = this.props.ElementID;
-        let schemaHelper = new SchemaHelper(this.Form,ElementID);
-        let ElementProps = schemaHelper.getModifyProps();
-        let ElementClasses = schemaHelper.getModifyClasses();
+        // get props element or default props
+        let SchemaElement = SchemaStore.getSchemaElement({ FormID:this.Form.FormID, ElementID:ElementID});
+        let ElementProps = SchemaElement.props;
+        let ElementClasses = SchemaElement.classes;
         return <Submit name={ElementProps.name} className={ElementClasses.button} onSubmit={this.Form.Events.onSubmit}/>
     },
     tinymce(){
@@ -199,16 +200,17 @@ const Render = React.createClass({
         let ElementID = this.props.ElementID;
         let error = this.Form.getElement(ElementID).valid_error || "";
         function createMarkup() { return {__html: error}; };
-        let schemaHelper = new SchemaHelper(this.Form,ElementID);
-        let ElementProps = schemaHelper.getModifyProps();
-        let ElementClasses = schemaHelper.getModifyClasses();
+        // get props element or default props
+        let SchemaElement = SchemaStore.getSchemaElement({ FormID:this.Form.FormID, ElementID:ElementID});
+        let ElementProps = SchemaElement.props;
+        let ElementClasses = SchemaElement.classes;
         return (
             <FormGroup controlId={ElementID}>
                 <Col componentClass={ControlLabel} className={ElementClasses.label}>
-                    {Element.props.name}
+                    {ElementProps.name}
                 </Col>
                 <Col className={ElementClasses.element}>
-                    <Tinymce value={this.Form.getValueElement(ElementID)} handle={new TinyMceHandle(Element,this.Form.dispatcher)} ElementID={ElementID} schemaElement={Element} ElementProps={ElementProps}/>
+                    <Tinymce FormID={this.Form.FormID} ElementID={ElementID} handle={new TinyMceHandle(Element,this.Form.dispatcher)} value={this.Form.getValueElement(ElementID)}/>
                 </Col>
                 {error.length>0 ? <div dangerouslySetInnerHTML={createMarkup()} />: null}
             </FormGroup>

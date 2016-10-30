@@ -8,14 +8,26 @@
  * */
 
 import React from 'react';
-import {eventFire} from '../Helper';
-import SchemaHelper from '../schema/SchemaHelper';
+import {eventFire} from '../../Helper';
+import Component from '../classes/Component'
+import PrivateSettings from './PrivateSettings'
 
-const Tinymce = React.createClass({
+class Tinymce extends Component
+{
+    binding(){
+        this.handleChange = this.handleChange.bind(this);
+    }
+    constructor(props){
+        super(props);
+        this.binding();
+    }
+    componentWillMount(){
+        this.initSettingsElement(PrivateSettings);
+    }
     componentDidMount(){
         let tinymce = window.tinymce;
         let _this = this;
-        let props =this.props.ElementProps;
+        let props =this.getPropsElementFromSchema();
         tinymce.remove();
         tinymce.init({
             selector:'#tinymce_el',
@@ -33,21 +45,17 @@ const Tinymce = React.createClass({
                 });
             }
         });
-    },
-    getSchemaElement(){
-        return this.props.schemaElement;
-    },
+    }
     handleChange(Html){
-        let schemaElement = this.getSchemaElement();
-        console.log(Html);
         // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:Html});
-    },
+        this.props.handle.onChange({ElementID:this.props.ElementID,Value:Html});
+    }
     render() {
+        let value = this.getValueElement();
         return(
-            <textarea id="tinymce_el" value={this.props.value}>{this.props.value}</textarea>
+            <textarea id="tinymce_el" value={value}>{value}</textarea>
         );
     }
-});
+}
 
 export default Tinymce;

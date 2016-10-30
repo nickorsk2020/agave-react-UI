@@ -127,7 +127,8 @@ let Schema = {
                 "element":""
             },
             "props": {
-                "name": "select"
+                "name": "select",
+                "placeholder":"Выбирите тип"
             },
             "value":"",
             "values": [
