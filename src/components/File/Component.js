@@ -9,35 +9,49 @@
 
 import React from 'react';
 import { FormGroup,Button,ControlLabel, Col } from 'react-bootstrap';
+import Component from '../classes/Component'
+import PrivateSettings from './PrivateSettings'
 
-const File = React.createClass({
-    getSchemaElement(){
-        return this.props.schemaElement;
-    },
-    Reader:new FileReader(),
+class File extends Component
+{
+    binding(){
+        this.openFileHandle = this.openFileHandle.bind(this);
+        this.changeFileHandle = this.changeFileHandle.bind(this);
+    }
+    constructor(props){
+        super(props);
+        this.binding();
+    }
+    componentWillMount(){
+        this.initSettingsElement(PrivateSettings);
+    }
     openFileHandle(){
         let fileInput = this.refs.fileInput;
         fileInput.click();
-    },
+    }
     changeFileHandle(){
         let fileInput = this.refs.fileInput;
-        this.Reader.readAsDataURL(fileInput.files[0]);
-    },
+        let settings = this.getSettings();
+        settings.Reader.readAsDataURL(fileInput.files[0]);
+    }
     componentDidMount(){
         let _this = this;
-        this.Reader.onloadend = function(e) {
+        let settings = this.getSettings();
+        settings.Reader.onloadend = function(e) {
             var dataUri = e.target.result;
             let fileInput = _this.refs.fileInput;
-            let schemaElement = _this.getSchemaElement();
             // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-            _this.props.handle.onChange({ElementID:_this.props.ElementID,Element:schemaElement,Value:{dataUri:dataUri,fileInput:fileInput.files[0]}});
+            _this.props.handle.onChange({ElementID:_this.props.ElementID,Value:{dataUri:dataUri,fileInput:fileInput.files[0]}});
         };
-    },
+    }
     render() {
-        let Element = this.props.Element;
+        let Element = this.getSchemaElement();
         let fileName = false;
-        if(this.props.fileName.length>0){
-            fileName = this.props.fileName;
+        let value = this.getValueElement();
+        if(typeof value =='object'){
+            fileName =value.fileInput.name;
+        }else{
+            fileName = false;
         }
         return(
             <FormGroup>
@@ -52,6 +66,6 @@ const File = React.createClass({
             </FormGroup>
         );
     }
-});
+}
 
 export default File;

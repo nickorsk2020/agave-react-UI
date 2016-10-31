@@ -8,7 +8,7 @@
  * */
 export Input from './Input/Component';
 export Image from './Image';
-export File from './File';
+export File from './File/Component';
 export Textarea from './Textarea/Component';
 export Select from './Select/Component';
 export Tinymce from './Tinymce/Component';

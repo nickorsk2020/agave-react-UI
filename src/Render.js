@@ -32,8 +32,8 @@ const Render = React.createClass({
                 <Col componentClass={ControlLabel} className={ElementClasses.label}>
                     {ElementProps.name}
                 </Col>
-                <Col className={ElementClasses.element} ref="parent-container">
-                    <CheckBoxes FormID={this.Form.FormID} ElementID={ElementID} handle={new CheckBoxesHandle(Element,this.Form.dispatcher)} value={value} parent={this.refs['parent-container']} />
+                <Col className={ElementClasses.element}>
+                    <CheckBoxes FormID={this.Form.FormID} ElementID={ElementID} handle={new CheckBoxesHandle(Element,this.Form.dispatcher)} value={value}/>
                 </Col>
                 {error.length>0 ? <div dangerouslySetInnerHTML={createMarkup()} />: null}
             </FormGroup>
@@ -92,16 +92,12 @@ const Render = React.createClass({
     file(){
         let Element = this.props.Element;
         let ElementID = this.props.ElementID;
-        let fileName = "";
-        let file = this.Form.getElement(ElementID);
+        let value = this.Form.getValueElement(ElementID);
         let error = this.Form.getElement(ElementID).valid_error || "";
         function createMarkup() { return {__html: error}; };
-        if(typeof file.value =="object"){
-            fileName = file.value.fileInput.name;
-        }
         return(
             <div>
-                <File fileName={fileName} handle={new FileHandle(Element,this.Form.dispatcher)} Element={this.props.Element} ElementID={ElementID} schemaElement={Element}/>
+                <File FormID={this.Form.FormID} ElementID={ElementID} handle={new FileHandle(Element,this.Form.dispatcher)} value={value}/>
                 {error.length>0 ? <div dangerouslySetInnerHTML={createMarkup()} />: null}
             </div>
         );

@@ -19,6 +19,7 @@ class CheckBoxes extends Component
         this.sendValue = this.sendValue.bind(this);
         this.clickParentDiv = this.clickParentDiv.bind(this);
         this.changeRadio = this.changeRadio.bind(this);
+        this.clickRadio = this.clickRadio.bind(this);
         this.setValueFromSchema = this.setValueFromSchema.bind(this);
     }
     constructor(props){
@@ -41,38 +42,26 @@ class CheckBoxes extends Component
     }
     // send value to dispatcher
     sendValue(Value){
-        let schemaElement = this.getSchemaElement();
-        let parent = ReactDOM.findDOMNode(this.props.parent);
-        let array_values = [];
-        if(parent==null){
-            array_values.push(Value);
-        }else{
-            // value is checked earlier
-            let valueIsCheked = false;
-            let checkboxes = parent.getElementsByClassName('checkbox-element');
-            // loop all checkboxes
-            for(let c=0;c<checkboxes.length;c++){
-                if(checkboxes[c].checked){
-                    if(Value!=checkboxes[c].value){
-                        array_values.push(checkboxes[c].value);
-                    }else{
-                        valueIsCheked = true;
-                        array_values.splice(c,1);
-                    }
-                }
-            }
-            if(!valueIsCheked){
-                array_values.push(Value);
+        let parent = ReactDOM.findDOMNode(this.refs['parent-container']);
+        let settings = deepClone(this.getSettings());
+        let array_values = settings.array_values;
+        let isCheked = false;
+        for(let a=array_values.length-1;a>=0;a--){
+            if(Value==array_values[a]){
+                isCheked = true;
+                array_values.splice(a,1);
             }
         }
-        let settings = deepClone(this.getSettings());
-        settings.array_values = array_values;
+        if(!isCheked){
+            array_values.push(Value)
+        }
+       // settings.array_values = array_values;
         this.setSettings(settings);
         // отправляем событие через диспетчер в форму c ID елемента, его схемой и значением
-        this.props.handle.onChange({ElementID:this.props.ElementID,Element:schemaElement,Value:array_values.join(';')});
+        this.props.handle.onChange({ElementID:this.props.ElementID,Value:array_values.join(';')});
     }
     clickParentDiv(event){
-        event.stopPropagation();
+        //event.stopPropagation();
         let el = event.target;
         let radio = el.getElementsByClassName('checkbox-element')[0];
         if(radio!=null){
@@ -85,7 +74,7 @@ class CheckBoxes extends Component
     changeRadio(event){
         event.stopPropagation();
         let radio = event.target;
-        this.sendValue(radio.value);
+        !radio.checked ? this.sendValue(radio.value,true): this.sendValue(radio.value);
     }
     render() {
         let style =  `
@@ -99,7 +88,7 @@ class CheckBoxes extends Component
         let settings = this.getSettings();
         let array_values = settings.array_values;
         return(
-            <div value={this.props.value}>
+            <div ref="parent-container">
                 <style>
                     {style}
                 </style>
@@ -108,9 +97,16 @@ class CheckBoxes extends Component
                     for(let a=0;a<array_values.length;a++){
                         if(Value.value==array_values[a]){
                             checked =true;
+                            break;
                         }
                     }
-                    return  <div key={Value.value} ><div onClick={_this.clickParentDiv} className="checkbox-element-parent"><input className="checkbox-element" checked={checked} type="checkbox" name={_this.props.ElementID} value={Value.value} onChange={_this.changeRadio} onClick={_this.clickRadio}/> &nbsp;{Value.text}</div><br/></div>
+                    return(
+                    <div key={Value.value} >
+                        <div onClick={_this.clickParentDiv} className="checkbox-element-parent">
+                            <input className="checkbox-element" checked={checked} type="checkbox" name={_this.props.ElementID} value={Value.value} onChange={_this.changeRadio} onClick={_this.clickRadio}/>
+                            &nbsp;{Value.text}
+                        </div><br/>
+                    </div>)
                 })}
             </div>
         );
