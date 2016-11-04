@@ -11,4 +11,3 @@ export Form from './Form';
 export ValidationRules from './ValidationRules';
 export Helper from './Helper';
 export ValidatorSchema from './ValidatorSchema';
-export SchemaHelper from './SchemaHelper';

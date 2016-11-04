@@ -13,7 +13,6 @@ import { TinyMceHandle, TextAreaHandle, FileHandle, CheckBoxesHandle,RadioButton
 // Elements
 import { CheckBoxes, RadioButtons, DatePicker, Static, File, Tinymce, Select, Textarea, Input, Submit, Image} from './components/'
 import SchemaStore from './schema/SchemaStore'
-import SchemaHelper from './schema/SchemaHelper'
 
 const Render = React.createClass({
     Form:null,
@@ -85,9 +84,8 @@ const Render = React.createClass({
         );
     },
     _static(){
-        let Element = this.props.Element;
         let ElementID = this.props.ElementID;
-        return <Static html={Element.props.html} schemaElement={Element}/>
+        return <Static FormID={this.Form.FormID} ElementID={ElementID}/>
     },
     file(){
         let Element = this.props.Element;
@@ -105,17 +103,12 @@ const Render = React.createClass({
     image(){
         let Element = this.props.Element;
         let ElementID = this.props.ElementID;
-        let file = this.Form.getElement(ElementID);
-        let Src = "";
+        let value = this.Form.getValueElement(ElementID);
         let error = this.Form.getElement(ElementID).valid_error || "";
         function createMarkup() { return {__html: error}; };
-
-        if(file.value.dataUri != 'undefined'){
-            Src = file.value.dataUri;
-        }
         return (
             <div>
-                <Image src={Src} handle={new ImageHandle(Element,this.Form.dispatcher)} Element={this.props.Element} ElementID={ElementID} schemaElement={Element}/>
+                <Image FormID={this.Form.FormID} ElementID={ElementID} handle={new ImageHandle(Element,this.Form.dispatcher)} value={value}/>
                 {error.length>0 ? <div dangerouslySetInnerHTML={createMarkup()} />: null}
             </div>
         );

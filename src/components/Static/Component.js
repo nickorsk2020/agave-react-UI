@@ -8,25 +8,29 @@
  * */
 
 import React from 'react';
-import { _typeof } from '../Helper';
+import { _typeof } from '../../Helper';
+import Component from '../classes/Component'
 
-const Static = React.createClass({
-    getSchemaElement(){
-        return this.props.schemaElement;
-    },
+class Static extends Component {
+    constructor(props){
+        super(props);
+    }
+    componentWillMount(){
+      //  this.initSettingsElement(PrivateSettings);
+    }
     render() {
-        let _this = this;
         let schemaElement = this.getSchemaElement();
         let container_class = _typeof(schemaElement, "classes", "container") || '';
         let style = {"display":"inline-block"};
+        let propsElementSchema = this.getPropsElementFromSchema();
         if(container_class!=''){
             style = {};
         }
-        function createMarkup() { return {__html: _this.props.html}; }
+        function createMarkup() { return {__html: propsElementSchema.html}; }
         return(
             <div className={container_class} style={style} dangerouslySetInnerHTML={createMarkup()} />
         );
     }
-});
+};
 
 export default Static;

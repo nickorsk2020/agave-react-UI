@@ -4,7 +4,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-    devtool: 'eval-source-map',
+    devtool: 'source-map',
     entry: [
         path.join(__dirname, 'index.js')
     ],
@@ -14,11 +14,18 @@ module.exports = {
         publicPath: '/'
     },
     plugins: [
+        new webpack.optimize.UglifyJsPlugin({
+            output: {
+                comments: false
+            },
+            compressor: {
+                warnings: false,
+                screw_ie8: true
+            }
+        }),
         new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin(),
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('development')
+            'process.env.NODE_ENV': JSON.stringify('production')
         })
     ],
     resolve:{
@@ -46,7 +53,7 @@ module.exports = {
             {
                 test: /\.js?$/,
                 exclude: /node_modules/,
-                loader: 'babel'
+                loaders: ['babel']
             },
             { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&minetype=application/font-woff" },
             { test: /\.(ttf|eot|svg|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }

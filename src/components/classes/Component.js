@@ -19,6 +19,7 @@ class Component extends React.Component
         this._binding();
     }
     getSchemaElement(){
+        console.log(this.props.ElementID);
         return SchemaStore.getSchemaElement({FormID:this.props.FormID,ElementID:this.props.ElementID});
     }
     // get props element from schema

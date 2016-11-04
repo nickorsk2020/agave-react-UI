@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  * */
 export Input from './Input/Component';
-export Image from './Image';
+export Image from './Image/Component';
 export File from './File/Component';
 export Textarea from './Textarea/Component';
 export Select from './Select/Component';
@@ -15,5 +15,5 @@ export Tinymce from './Tinymce/Component';
 export DatePicker from './DatePicker/Component';
 export RadioButtons from './RadioButtons/Component';
 export CheckBoxes from './CheckBoxes/Component';
-export Static from './Static';
+export Static from './Static/Component';
 export Submit from './Submit';
