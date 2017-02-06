@@ -10,4 +10,5 @@
 export Form from './Form';
 export ValidationRules from './ValidationRules';
 export Helper from './Helper';
-export ValidatorSchema from './ValidatorSchema';
+export ValidatorSchema from './schema/ValidatorSchema';
+export SchemeModifier from './schema/SchemeModifier';
